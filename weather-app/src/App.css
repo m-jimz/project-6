@@ -33,15 +33,38 @@ body {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .city-input {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  font-size: 1.05rem;
   border: 2px solid #667eea;
   border-radius: 5px;
-  width: 250px;
+  width: 300px;
   transition: border-color 0.3s;
+}
+
+.city-button {
+  padding: 0.85rem 1.25rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  background: #667eea;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.city-button:hover {
+  background: #5567d8;
+  transform: translateY(-1px);
+}
+
+.city-button:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.35);
 }
 
 .city-input:focus {
@@ -59,13 +82,13 @@ body {
 }
 
 .search-input {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  font-size: 1.05rem;
   border: 2px solid #764ba2;
   border-radius: 5px;
   flex: 1;
-  min-width: 250px;
-  max-width: 400px;
+  min-width: 320px;
+  max-width: 540px;
   transition: border-color 0.3s;
 }
 
@@ -76,15 +99,15 @@ body {
 }
 
 .humidity-filter {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  font-size: 1.05rem;
   border: 2px solid #764ba2;
   border-radius: 5px;
   background-color: white;
   color: #333;
   cursor: pointer;
   transition: border-color 0.3s;
-  min-width: 200px;
+  min-width: 260px;
 }
 
 .humidity-filter:hover {
@@ -144,10 +167,10 @@ body {
 
 .summary-statistics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -186,15 +209,15 @@ body {
 .weather-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  max-width: 1200px;
+  gap: 1.75rem;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .weather-card {
   background: white;
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s, box-shadow 0.3s;
   display: flex;
@@ -216,13 +239,13 @@ body {
 .card-header h3 {
   margin: 0;
   color: #667eea;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .card-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
 }
 
 .weather-item {
@@ -240,13 +263,13 @@ body {
 .weather-item .label {
   font-weight: 600;
   color: #555;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .weather-item .value {
   color: #667eea;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 1rem;
   text-align: right;
 }
 
@@ -260,6 +283,10 @@ body {
   }
 
   .city-input {
+    width: 100%;
+  }
+
+  .city-button {
     width: 100%;
   }
 
