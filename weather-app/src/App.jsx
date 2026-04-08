@@ -1,120 +1,114 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [weatherData, setWeatherData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [city, setCity] = useState('London')
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        
+        const apiKey = '6161a988b0eb4b2f8556cb5341bbb399'
+        const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}`
+        
+        const response = await fetch(url)
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data')
+        }
+        
+        const data = await response.json()
+        setWeatherData(data.list.slice(0, 10))
+      } catch (err) {
+        setError(err.message)
+        console.error('Error fetching weather:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchWeatherData()
+  }, [city])
+
+  const handleCityChange = (e) => {
+    setCity(e.target.value)
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <header className="app-header">
+        <h1>Weather Dash</h1>
+        <div className="city-selector">
+          <input
+            type="text"
+            placeholder="Enter city name"
+            value={city}
+            onChange={handleCityChange}
+            className="city-input"
+          />
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      <main className="app-main">
+        {loading && <div className="loading">Loading weather data...</div>}
+        {error && <div className="error">Error: {error}</div>}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        
+        {!loading && !error && (
+          <>
+            <h2 className="forecast-title">5-Day Weather Forecast for {city}</h2>
+            <div className="weather-dashboard">
+              {weatherData.map((item, index) => (
+                <div key={index} className="weather-card">
+                  <div className="card-header">
+                    <h3>{new Date(item.dt * 1000).toLocaleString()}</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="weather-item">
+                      <span className="label">Temperature:</span>
+                      <span className="value">{item.main.temp}°C</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Feels Like:</span>
+                      <span className="value">{item.main.feels_like}°C</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Humidity:</span>
+                      <span className="value">{item.main.humidity}%</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Pressure:</span>
+                      <span className="value">{item.main.pressure} hPa</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Wind Speed:</span>
+                      <span className="value">{item.wind.speed} m/s</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Condition:</span>
+                      <span className="value">{item.weather[0].main}</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Description:</span>
+                      <span className="value">{item.weather[0].description}</span>
+                    </div>
+                    <div className="weather-item">
+                      <span className="label">Cloud Cover:</span>
+                      <span className="value">{item.clouds.all}%</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </main>
+    </div>
   )
 }
 
